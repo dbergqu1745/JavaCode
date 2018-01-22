@@ -45,24 +45,36 @@ public class BasicDraw extends Application{
 	
 	void render(GraphicsContext context) {
 		Random rand = new Random();
+		double[] rands = new double[3];
 		int buff = 5;
-		int xCoord = 0;
-		int yCoord = 0;
-		double n = 0.0;
+		int length = 600;
+		int xCoordRect = 0;
+		int yCoordRect = 0;
+		int xCoordCircle;
+		int yCoordCircle;
 		
-		//squares just get smaller and are all gray
-		for (int i = 600; i >= 0; i -= buff) {
-			n = rand.nextDouble();
-			context.setFill(Color.color(n, n, n));
+		
+		for (int i = 300; i >= 0; i--) {
 			
-			if (i % 2 == 0) {
-				context.fillRect(xCoord, yCoord, i, i);
-			} else {
-				
+			//random doubles for making different 
+			//colors with Color.color(dbl, dbl, dbl)
+			for (int j = 0; j < 3; j++) {
+				rands[j] = rand.nextDouble();
 			}
 			
-			xCoord += buff;
-			yCoord += buff;
+			context.setFill(Color.color(rands[0], rands[1], rands[2]));
+			
+			//Alternating square and circle
+			//TODO: finish implementing circle draw part
+			if (i % 2 == 0) {
+				context.fillRect(xCoordRect, yCoordRect, length, length);
+			} else {
+				//context.fillOval(x, y, w, h);
+			}
+			
+			xCoordRect += buff;
+			yCoordRect += buff;
+			length -= 10;
 		}
 		
 	}
