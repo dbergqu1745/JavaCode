@@ -19,8 +19,9 @@ import javafx.util.Duration;
  * @version jan 2016
  */
 public class Fly extends Application {
-	final String appName = "Fly";
-	final int FPS = 10; // frames per second
+	final String appName = "Flyswatter Game";
+	// frames per second
+	final int FPS = 10; 
 	final int WIDTH = 600;
 	final int HEIGHT = 500;
 
@@ -41,6 +42,7 @@ public class Fly extends Application {
 	}
 
 	void setHandlers(Scene scene) {
+		//handling mouse press event
 		scene.setOnMousePressed(e -> {
 			int x = (int) e.getX();
 			int y = (int) e.getY();
@@ -50,6 +52,7 @@ public class Fly extends Application {
 			}
 		});
 
+		//handling mouse move event
 		scene.setOnMouseMoved(e -> {
 			int x = (int) e.getX();
 			int y = (int) e.getY();
@@ -68,6 +71,7 @@ public class Fly extends Application {
 		int dy = (int) (20 * Math.random() - 10);
 		fly_x += dx;
 		fly_y += dy;
+		
 		// If offscreen, move back to center
 		if (fly_x < 0 || fly_x > WIDTH || fly_y < 0 || fly_y > HEIGHT) {
 			fly_x = WIDTH / 2;
