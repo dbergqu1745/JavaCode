@@ -1,14 +1,36 @@
 package assignment3;
 
-import javafx.*;
+import java.util.ArrayList;
 
-/* Author: Daniel Bergquist
- * 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+/* Author: Daniel Bergquist (daniel.bergquist@marquette.edu)
+ * COSC 3550 Assignment 3 - Roomba Game
+ * Due 2/12/18
  */
 
 public class RoombaGame extends Application {
+	final String APP_NAME = "Dust Bunnies";
+	final int FRAMES_PER_SECOND = 25;
+	final static int HEIGHT = 1000;
+	final static int WIDTH = 1000;
+	
+	//add dust bunnies to right hand side later
+	//ArrayList<DustBunny> bunnies = new ArrayList<DustBunny>(1);
+	DustBunny bunny;
+	
 	void initialize() {
-		
+		bunny = new DustBunny();
 	}
 	
 	void setHandlers(Scene theScene) {
@@ -16,19 +38,62 @@ public class RoombaGame extends Application {
 	}
 	
 	void update() {
-		
+		bunny.updateBunny();
+		launch();
+	}
+	
+	void launch() {
+		if (!bunny.isActive()) {
+			bunny.resume();
+		}
 	}
 	
 	void render(GraphicsContext context) {
+		context.setFill(Color.CORAL);
+		context.fillRect(0.0, 0.0, WIDTH, HEIGHT);
+		
+//		for (DustBunny bunny : bunnies) {
+//			bunny.render(context);
+//		}
+		
+		bunny.render(context);
 		
 	}
 	
+	//Begin standard animation code
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	@Override
-	void start(Stage theStage) {
-		
+	public void start(Stage theStage) {
+		theStage.setTitle(APP_NAME);
+
+		Group root = new Group();
+		Scene theScene = new Scene(root);
+		theStage.setScene(theScene);
+
+		Canvas canvas = new Canvas(WIDTH, HEIGHT);
+		root.getChildren().add(canvas);
+
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+		// Initial setup
+		initialize();
+		setHandlers(theScene);
+
+		// Setup and start animation loop (Timeline)
+		KeyFrame kf = new KeyFrame(Duration.millis(1000 / FRAMES_PER_SECOND), e -> {
+			// update position
+			update();
+			// draw frame
+			render(gc);
+		});
+		Timeline mainLoop = new Timeline(kf);
+		mainLoop.setCycleCount(Animation.INDEFINITE);
+		mainLoop.play();
+
+		theStage.show();
 	}
+	//End standard animation code
 }

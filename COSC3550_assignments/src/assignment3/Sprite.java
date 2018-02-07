@@ -1,27 +1,22 @@
-package skeetGame;
+package assignment3;
 
 import javafx.scene.canvas.GraphicsContext;
 
 class Sprite {
+	//current position
 	double x, y;
-	double dx, dy;
-	public static final double GRAVITY = 2.0;
-
-	boolean active = false, visible = false;
-	/* QUESTION:
-	 * how do objects that extend Sprite automatically appear
-	 * on the screen if both 'visible' and 'active' are false
-	 * by default, and they are not changed in the child class?
-	 * 
-	 * ANSWER:
-	 * 
-	 */
 	
+	//directional velocity
+	double dx, dy;
+	
+	boolean active = false;
+	boolean visible = false;
+
 	void updatePosition() {
 		x += dx;
 		y += dy;
 
-		dy += GRAVITY;
+		//dy += GRAVITY;
 	}
 
 	void setPosition(double x2, double y2) {
