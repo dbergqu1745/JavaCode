@@ -5,28 +5,66 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-	private static int[] dodos = new int[2];
-	
+	private static int dodos = 0;
+
 	static void countDodos(String fileName) {
-		
-		File f = new File(fileName + ".rtf");
+
+		File f = new File(fileName + ".txt");
 		Scanner fileIn;
-		String word = "";
-		
+		String words = "";
+		int state = 1;
+
 		try {
 			fileIn = new Scanner(f);
-			
+
 			while (fileIn.hasNext()) {
-				word = fileIn.next();
-				word = word.replaceAll("\\p{P}", "");
-				
-				//using switch statement to implement state machine
-				switch (word) {
-				case "Dodo":
-					dodos[0]++;
+				words += fileIn.next();
+			}
+
+			int len = words.length();
+			char c;
+
+			for (int i = 0; i < len; i++) {
+				c = words.charAt(i);
+
+				switch (state) {
+				case 1:
+					if (c == 'D')
+						state = 2;
+					else
+						state = 1;
 					break;
-				case "dodo": 
-					dodos[1]++;
+				case 2:
+					if (c == 'D') 
+						state = 2;
+					else if (c == 'o')
+						state = 3;
+					else
+						state = 1;
+					break;
+				case 3:
+					if (c == 'D')
+						state = 2;
+					else if (c == 'd')
+						state = 4;
+					else
+						state = 1;
+					break;
+				case 4:
+					if (c == 'D')
+						state = 2;
+					else if (c == 'o')
+						state = 5;
+					else
+						state = 1;
+					break;
+				case 5:
+					System.out.println("Dodo found");
+					dodos++;
+					if (c == 'D')
+						state = 2;
+					else 
+						state = 1;
 					break;
 				}
 			}
@@ -35,13 +73,12 @@ public class Main {
 			System.out.println("File not found!");
 			System.exit(0);
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		countDodos("wonderland");
-		
-		System.out.println("Dodo was used " + dodos[0] + " times.");
-		System.out.println("dodo was used " + dodos[1] + " times.");
+		System.out.println("Dodo was used " + dodos + " times.");
+
 	}
 }

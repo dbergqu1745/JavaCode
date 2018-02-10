@@ -18,33 +18,49 @@ import javafx.util.Duration;
  * COSC 3550 Assignment 3 - Roomba Game
  * Due 2/12/18
  */
-
 public class RoombaGame extends Application {
 	final String APP_NAME = "Dust Bunnies";
 	final int FRAMES_PER_SECOND = 25;
 	final static int HEIGHT = 1000;
 	final static int WIDTH = 1000;
+	private int numBunnies = 15;
 	
-	//add dust bunnies to right hand side later
-	//ArrayList<DustBunny> bunnies = new ArrayList<DustBunny>(1);
-	DustBunny bunny;
+	//Game objects
+	ArrayList<DustBunny> bunnies = new ArrayList<DustBunny>();
+	Roomba roomba;
 	
 	void initialize() {
-		bunny = new DustBunny();
+		for (int i = 0; i < numBunnies; i++) {
+			bunnies.add(new DustBunny());
+		}
+		
+		roomba = new Roomba();
 	}
 	
+	//implement left and right arrow key handlers
 	void setHandlers(Scene theScene) {
 		
 	}
 	
 	void update() {
-		bunny.updateBunny();
+		for (DustBunny db : bunnies) {
+			db.updateBunny();
+		}
+		
+		roomba.updateRoomba();
+		
 		launch();
 	}
 	
 	void launch() {
-		if (!bunny.isActive()) {
-			bunny.resume();
+		for (DustBunny db : bunnies) {
+			if (!db.isActive()) {
+				db.resume();
+			}
+		}
+		
+		if (!roomba.isActive()) {
+			roomba.resume();
 		}
 	}
 	
@@ -52,12 +68,11 @@ public class RoombaGame extends Application {
 		context.setFill(Color.CORAL);
 		context.fillRect(0.0, 0.0, WIDTH, HEIGHT);
 		
-//		for (DustBunny bunny : bunnies) {
-//			bunny.render(context);
-//		}
+		for (DustBunny db : bunnies) {
+			db.render(context);
+		}
 		
-		bunny.render(context);
-		
+		roomba.render(context);
 	}
 	
 	//Begin standard animation code

@@ -2,6 +2,9 @@ package assignment3;
 
 import javafx.scene.canvas.GraphicsContext;
 
+/*
+ * Same Sprite class from lectures, with gravity removed
+ */
 class Sprite {
 	//current position
 	double x, y;
