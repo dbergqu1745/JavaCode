@@ -1,7 +1,5 @@
 package assignment3;
 
-import java.util.ArrayList;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -10,9 +8,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.text.Text;
 
 /* Author: Daniel Bergquist (daniel.bergquist@marquette.edu)
  * COSC 3550 Assignment 3 - Roomba Game
@@ -21,61 +21,114 @@ import javafx.util.Duration;
 public class RoombaGame extends Application {
 	final String APP_NAME = "Dust Bunnies";
 	final int FRAMES_PER_SECOND = 25;
-	final static int HEIGHT = 1000;
-	final static int WIDTH = 1000;
+	final static double HEIGHT = 1000;
+	final static double WIDTH = 1000;
 	private int numBunnies = 15;
-	
-	//Game objects
-	ArrayList<DustBunny> bunnies = new ArrayList<DustBunny>();
+	private int currentTime = 0;
+	private int currentFrame = 0;
+	private double collisionLimit = Roomba.DIAMETER / 2 + DustBunny.DIAMETER / 2;
+	private Text bunniesMessage;
+	private Text timeMessage;
+	private Text finishMessage;
+
+	private String msg1 = " dust bunnies remain";
+	private String msg2 = " dust bunny remains";
+	private String msg3 = " seconds";
+	private String msg4 = " second";
+
+	// Game objects
+	DustBunny[] bunnies = new DustBunny[numBunnies];
 	Roomba roomba;
 	
+	Timeline mainLoop;
+
 	void initialize() {
+
+		bunniesMessage = new Text(30, 30, numBunnies + msg1);
+		timeMessage = new Text(470, 30, "Time: " + currentTime + msg3);
+
 		for (int i = 0; i < numBunnies; i++) {
-			bunnies.add(new DustBunny());
+			bunnies[i] = new DustBunny();
 		}
-		
-		roomba = new Roomba();
+
+		roomba = new Roomba(WIDTH / 2, HEIGHT / 2);
 	}
-	
-	//implement left and right arrow key handlers
+
 	void setHandlers(Scene theScene) {
-		
+		theScene.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.RIGHT) {
+				roomba.turn(false);
+			} else if (e.getCode() == KeyCode.LEFT) {
+				roomba.turn(true);
+			}
+		});
 	}
-	
+
+	// detect collisions
 	void update() {
+
 		for (DustBunny db : bunnies) {
 			db.updateBunny();
+
+			// "if the current dust bunny is closer to the roomba than the collisionLimit"
+			if (db.isActive() && db.isCloserThan(roomba, collisionLimit)) {
+				db.suspend();
+				numBunnies--;
+			}
+		}
+
+		roomba.updateRoomba();
+
+		if (numBunnies == 1)
+			bunniesMessage.setText(numBunnies + msg2);
+		else
+			bunniesMessage.setText(numBunnies + msg1);
+
+		if (currentTime == 1)
+			timeMessage.setText("Time: " + currentTime + msg4);
+		else
+			timeMessage.setText("Time: " + currentTime + msg3);
+
+		++currentFrame;
+		if (currentFrame == FRAMES_PER_SECOND) {
+			currentFrame = 0;
+			++currentTime;
 		}
 		
-		roomba.updateRoomba();
-		
+		if (numBunnies == 0) {
+			finishMessage = new Text(470, 490, "You vacuumed all the dustbunnies in " + 
+									currentTime + " seconds!");
+			mainLoop.stop();	
+		}
+
 		launch();
 	}
-	
+
 	void launch() {
 		for (DustBunny db : bunnies) {
-			if (!db.isActive()) {
+			if (db.visible && db.active) {
 				db.resume();
 			}
 		}
-		
+
 		if (!roomba.isActive()) {
 			roomba.resume();
 		}
 	}
-	
+
 	void render(GraphicsContext context) {
 		context.setFill(Color.CORAL);
 		context.fillRect(0.0, 0.0, WIDTH, HEIGHT);
-		
+
 		for (DustBunny db : bunnies) {
-			db.render(context);
+			if (db.isActive())
+				db.render(context);
 		}
-		
+
 		roomba.render(context);
 	}
-	
-	//Begin standard animation code
+
+	// Begin standard animation code
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -104,11 +157,17 @@ public class RoombaGame extends Application {
 			// draw frame
 			render(gc);
 		});
-		Timeline mainLoop = new Timeline(kf);
+		mainLoop = new Timeline(kf);
 		mainLoop.setCycleCount(Animation.INDEFINITE);
 		mainLoop.play();
 
+		// add 'bunnies left' message
+		root.getChildren().add(bunniesMessage);
+
+		// add time message
+		root.getChildren().add(timeMessage);
+
 		theStage.show();
 	}
-	//End standard animation code
+	// End standard animation code
 }

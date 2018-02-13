@@ -6,16 +6,16 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class DustBunny extends Sprite {
 	Color color = Color.GRAY;
-	public static final double RADIUS = 30;
+	public static final double DIAMETER = 30;
 	Random rand = new Random();
 	
 	public DustBunny() {
 		dx = (double)rand.nextInt(15);
 		dy = (double)rand.nextInt(15);
-		x = (double)rand.nextInt(500) - RADIUS;
-		y = (double)rand.nextInt(500) - RADIUS;
-//		visible = true;
-//		active = true;
+		x = (double)rand.nextInt(500) - DIAMETER;
+		y = (double)rand.nextInt(500) - DIAMETER;
+		visible = true;
+		active = true;
 	}
 	
 	boolean inBoundsXLeft(double x) {
@@ -61,7 +61,7 @@ public class DustBunny extends Sprite {
 		//System.out.println("rendered" + visible + active);
 		if (visible) {
 			context.setFill(color);
-			context.fillOval(x - RADIUS, y - RADIUS, RADIUS, RADIUS);
+			context.fillOval(x - DIAMETER, y - DIAMETER, DIAMETER, DIAMETER);
 			//System.out.println(x + " " + y + " " + RADIUS + color + dx + dy);
 		}
 	}

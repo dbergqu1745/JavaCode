@@ -3,34 +3,60 @@ package assignment3;
 import java.awt.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Line;
 
 /*
  * Make the roomba the actual picture from the desktop
  */
 public class Roomba extends Sprite{
 	Image roombaImage;
-	Color color = Color.BLACK;
-	static final int RADIUS = 110;
-	static double directionAngle; 
+	Color roombaColor = Color.BLACK;
+	Color guideCircleColor = Color.ANTIQUEWHITE;
+	double arcLengthAdjustment;
+	static final int DIAMETER = 120;
+	static double directionAngle;
+	static double SPEED = 3;
+	Line guideLine = new Line();
 	
-	public Roomba() {
-		x = 500 - RADIUS;
-		y = 500 - RADIUS;
-		directionAngle = 90;
-		dx = 3;
+	public Roomba(double xi, double yi) {
+		//Center the roomba initially
+		x = xi - DIAMETER/2;
+		y = yi - DIAMETER/2;
+		directionAngle = 0;
+		dx = 0;
 		dy = 0;
 	}
 	
-//	void turn(boolean direc) {
-//		if (direc)
-//			directionAngle += -.5;
-//		else
-//			directionAngle += .5;
-//	}
+	boolean inBoundsXLeft(double x) {
+		return x >= 0;
+	}
 	
-	@Override
-	void updatePosition() {
-		if (directionAngle )
+	boolean inBoundsXRight(double x) {
+		return x <= 1000;
+	}
+	
+	boolean inBoundsYBottom(double x) {
+		return x <= 1000;
+	}
+	
+	boolean inBoundsYTop(double x) {
+		return x >= 0;
+	}
+	
+	double getCenterX() {
+		return x + DIAMETER/2;
+	}
+	
+	double getCenterY() {
+		return y + DIAMETER/2;
+	}
+	
+	void turn(boolean direc) {		
+		if (direc) {
+			--directionAngle;
+		} else {
+			++directionAngle;
+		}
 	}
 	
 	/*
@@ -42,14 +68,25 @@ public class Roomba extends Sprite{
 	 */
 	void updateRoomba() {
 		if (active) {
+			
+			//updating speed with direction
+			dy = SPEED * Math.sin(directionAngle);
+			dx = SPEED * Math.cos(directionAngle);
+			
 			updatePosition();
 		}
 	}
 	
+	//redraw roomba and guiding circle
 	void render(GraphicsContext context) {
 		if (visible) {
-			context.setFill(color);
-			context.fillOval(x - RADIUS, y - RADIUS, RADIUS, RADIUS);
+			context.setFill(roombaColor);
+			context.fillOval(x - DIAMETER/2, y - DIAMETER/2, DIAMETER, DIAMETER);
+			
+			context.setFill(guideCircleColor);
+			context.fillOval(x + (DIAMETER/2)*Math.cos(directionAngle), y + (DIAMETER/2)*Math.sin(directionAngle), 
+							DIAMETER/6, DIAMETER/6);
+
 		}
 	}
 }
