@@ -33,14 +33,19 @@ public class Box {
 		x += vx;
 		y += vy;
 		// Check for walls
-		if (x < 0)
+		if ((x + w > FloatingBoxes.WIDTH) || (x < 0))
 			vx = -vx;
-		if (x + w > FloatingBoxes.WIDTH)
-			vx = -vx;
+		if ((y < 0) || (y + h > FloatingBoxes.HEIGHT)) {
+			vy = -vy;
+		}
 	}
 
 	public boolean overlaps(Box b) {
-		return false;
+		//box1.overlaps(box2)
+		return (b.x <= this.x + this.w) &&
+				(b.y <= this.y + this.h) &&
+				(this.x <= b.x + b.y) &&
+				(this.y <= b.y + b.h);
 	}
 
 	public void reverse() {
@@ -49,7 +54,7 @@ public class Box {
 	}
 
 	public void render(GraphicsContext gc) {
-		gc.setFill(Color.PLUM);
+		gc.setFill(Color.BLACK);
 		gc.fillRect(x, y, w, h);
 	}
 }

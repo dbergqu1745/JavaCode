@@ -49,9 +49,7 @@ public class BlockPainter extends Application {
 			playerBlockX = e.getSceneX();
 			playerBlockY = e.getSceneY();
 			
-			gc.beginPath();
-			gc.lineTo(playerBlockX, playerBlockY);
-			gc.stroke();
+			gc.moveTo(playerBlockX, playerBlockY);
 			
 			render(gc);
 		});
@@ -61,9 +59,8 @@ public class BlockPainter extends Application {
 			playerBlockY = e.getSceneY();
 			
 			gc.lineTo(playerBlockX, playerBlockY);
-			gc.stroke();
 			
-			//render(gc);
+			render(gc);
 		});
 		
 		//moving 'brush' around the screen
@@ -102,6 +99,8 @@ public class BlockPainter extends Application {
 		gc.setStroke(Color.rgb(colorRed, colorGreen, colorBlue));
 		gc.setFill(Color.rgb(colorRed, colorGreen, colorBlue));
 		gc.fillRect(playerBlockX, playerBlockY, 50, 10);
+		
+		gc.stroke();
 	}
 
 	public static void main(String[] args) {

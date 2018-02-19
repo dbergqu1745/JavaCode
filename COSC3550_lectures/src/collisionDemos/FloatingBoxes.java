@@ -22,10 +22,10 @@ import javafx.util.Duration;
 public class FloatingBoxes extends Application {
 	final String appName = "FloatingBoxes";
 	final int FPS = 30; // frames per second
-	static final int WIDTH = 750;
-	static final int HEIGHT = 500;
+	static final int WIDTH = 850;
+	static final int HEIGHT = 850;
 
-	Box[] boxes = new Box[5];
+	Box[] boxes = new Box[2];
 
 	/**
 	 * Set up initial data structures/values
@@ -43,17 +43,18 @@ public class FloatingBoxes extends Application {
 			b.move();
 		// Run through pairs of boxes checking for collisions
 		// (i > j to avoid duplicate pairs)
-		for (int i = 1; i < boxes.length; i++)
+		for (int i = 1; i < boxes.length; i++) {
 			for (int j = 0; j < i; j++) {
 				if (boxes[i].overlaps(boxes[j])) {
-					boxes[i].reverse();
-					boxes[j].reverse();
-				} 
-				if (boxes[i].h <= HEIGHT || boxes[j].h <= HEIGHT) {
+					System.out.println("Collision detected between " + boxes[i] + " and " + boxes[j] + ":");
+					System.out.println(boxes[i].x + " " + boxes[i].y + " " + boxes[i].h + " " + boxes[i].w +
+									  " " + boxes[j].x + " " + boxes[j].y + " " + boxes[j].h + " " + boxes[j].w);
 					boxes[i].reverse();
 					boxes[j].reverse();
 				}
+				
 			}
+		}
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class FloatingBoxes extends Application {
 	 */
 	void render(GraphicsContext gc) {
 		// Clear background
-		gc.setFill(Color.CYAN);
+		gc.setFill(Color.ORANGE);
 		gc.fillRect(0, 0, WIDTH, HEIGHT);
 
 		// Draw buildings
