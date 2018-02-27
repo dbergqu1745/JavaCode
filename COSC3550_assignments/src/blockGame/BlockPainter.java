@@ -25,7 +25,7 @@ public class BlockPainter extends Application {
 	final String APPNAME = "Block Painter";
 	final int FRAMES_PER_SECOND = 10;
 	final int WIDTH = 1000;
-	final int HEIGHT = 1000;
+	final int HEIGHT = 850;
 	
 	int colorRed = 0;
 	int colorBlue = 0;
