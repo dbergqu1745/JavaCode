@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.application.Application;
 
 /*
@@ -18,19 +19,21 @@ import javafx.application.Application;
  * A variation of pong for two players wherein each player
  * controls two paddles on adjacent or opposite sides
  */
-public class TwoPlayerPong extends Application {
-	final String APP_NAME = "Two Player Pong";
+public class FourPaddlePong extends Application {
+	final String APP_NAME = "Four Paddle Pong";
 	final static double WIDTH = 850;
 	final static double HEIGHT = 850;
 	final double FRAMES_PER_SECOND = 25;
+	
+	final Color playerOneColor = Color.CORNFLOWERBLUE;
+	final Color playerTwoColor = Color.CRIMSON;
 
 	GraphicsContext gc;
 	
 	//game objects
-	Paddle left;
-	Paddle top;
-	Paddle right;
-	Paddle bottom;
+	UpDownPaddle left, right;
+	LeftRightPaddle top, bottom;
+	//board for info about the game: score, active powerups, etc
 	Ball ball;
 
 	public void initialize() {
@@ -39,7 +42,7 @@ public class TwoPlayerPong extends Application {
 
 	public void setHandlers(Scene scene) {
 		scene.setOnKeyPressed(e -> {
-			// player one uses WASD
+			// player one uses WASD for top and left paddles
 			if (e.getCode() == KeyCode.W) {
 
 			}
@@ -53,7 +56,37 @@ public class TwoPlayerPong extends Application {
 
 			}
 			
-			// Player two uses arrow keys
+			// Player two uses arrow keys for bottom and right paddles
+			if (e.getCode() == KeyCode.UP) {
+
+			}
+			if (e.getCode() == KeyCode.LEFT) {
+
+			}
+			if (e.getCode() == KeyCode.RIGHT) {
+
+			}
+			if (e.getCode() == KeyCode.DOWN) {
+
+			}
+		});
+		
+		scene.setOnKeyReleased(e -> {
+			//player one
+			if (e.getCode() == KeyCode.W) {
+
+			}
+			if (e.getCode() == KeyCode.A) {
+
+			}
+			if (e.getCode() == KeyCode.S) {
+
+			}
+			if (e.getCode() == KeyCode.D) {
+
+			}
+			
+			//player two
 			if (e.getCode() == KeyCode.UP) {
 
 			}

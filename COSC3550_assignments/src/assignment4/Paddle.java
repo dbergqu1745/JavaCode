@@ -1,27 +1,23 @@
 package assignment4;
 
 import javafx.scene.paint.Color;
+import javafx.scene.canvas.GraphicsContext;
 
 public class Paddle extends Sprite{
-	double width = TwoPlayerPong.WIDTH / 10;
+	double width;
 	final double THICCNESS = 20;
+	double x, y;
 	Color color;
-	boolean orientation;
+	//orientation: true for horizontal, false for vertical
+	//moveDirection: false for negative, true for positive
+	boolean orientation, moveDirection;
 	
-	public Paddle(Color c, boolean orientation) {
-		if (orientation) {
-			x = TwoPlayerPong.WIDTH - width;
-			y = 0;
-		} else {
-			x = 0;
-			y = TwoPlayerPong.WIDTH - width;
-		}
-		color = c;
-		visible = true;
-		active = true;
-	}
+
 	
 	void updatePaddle() {
 		
+	}
+	
+	void render(GraphicsContext context) {
 	}
 }

@@ -6,7 +6,7 @@ public class ArrayStack {
 	
 	public ArrayStack(int size) {
 		Stack = new int[size];
-		indTop = 0;
+		indTop = -1;
 		stackSize = 0;
 	}
 	
@@ -18,16 +18,26 @@ public class ArrayStack {
 		}
 		
 		System.out.println("top");
+		System.out.println();
 	}
 	
 	public void push(int a) {
 		if (checkForResize())
 			this.reSize();
 		
-		this.Stack[indTop] = a;
+		this.Stack[++indTop] = a;
 		
-		++indTop;
 		++stackSize;
+	}
+	
+	public int pop() {
+		int n = this.Stack[indTop];
+		--stackSize;
+		return n;
+	}
+	
+	public void peek() {
+		System.out.println(this.Stack[indTop]);
 	}
 	
 	public boolean checkForResize() {
@@ -59,6 +69,11 @@ public class ArrayStack {
 		
 		arrayStack.push(6);
 		arrayStack.printStack();
+		
+		System.out.println(arrayStack.pop());
+		arrayStack.printStack();
+		
+		arrayStack.peek();
 		
 	}
 }
