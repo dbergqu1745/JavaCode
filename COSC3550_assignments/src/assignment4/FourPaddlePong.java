@@ -23,87 +23,93 @@ public class FourPaddlePong extends Application {
 	final String APP_NAME = "Four Paddle Pong";
 	final static double WIDTH = 850;
 	final static double HEIGHT = 850;
-	final double FRAMES_PER_SECOND = 25;
-	
+	final double FRAMES_PER_SECOND = 30;
+	final double PIXEL_BUFFER = 10;
+
 	final Color playerOneColor = Color.CORNFLOWERBLUE;
 	final Color playerTwoColor = Color.CRIMSON;
 
 	GraphicsContext gc;
-	
-	//game objects
+
+	// game objects
 	UpDownPaddle left, right;
 	LeftRightPaddle top, bottom;
-	//board for info about the game: score, active powerups, etc
+	// board for info about the game: score, active powerups, etc
 	Ball ball;
 
+	Sprite[] gameSprites = new Sprite[4];
+
 	public void initialize() {
+		left = new UpDownPaddle(playerOneColor, PIXEL_BUFFER, (HEIGHT / 2) + UpDownPaddle.HEIGHT);
+		right = new UpDownPaddle(playerTwoColor, WIDTH - (UpDownPaddle.THICKNESS + PIXEL_BUFFER), (HEIGHT / 2) + UpDownPaddle.HEIGHT);
 		
+		top = new LeftRightPaddle(playerOneColor, (WIDTH / 2) + LeftRightPaddle.WIDTH, PIXEL_BUFFER);
+		bottom = new LeftRightPaddle(playerTwoColor, (WIDTH / 2) + LeftRightPaddle.WIDTH, HEIGHT - (LeftRightPaddle.THICKNESS + PIXEL_BUFFER));
+		
+		ball = new Ball();
+
+		gameSprites[0] = left;
+		gameSprites[1] = right;
+		gameSprites[2] = top;
+		gameSprites[3] = bottom;
+//		gameSprites[2] = ball;
 	}
 
 	public void setHandlers(Scene scene) {
 		scene.setOnKeyPressed(e -> {
 			// player one uses WASD for top and left paddles
 			if (e.getCode() == KeyCode.W) {
-
-			}
-			if (e.getCode() == KeyCode.A) {
-
-			}
-			if (e.getCode() == KeyCode.S) {
-
-			}
-			if (e.getCode() == KeyCode.D) {
-
-			}
-			
+				left.setUpKey(true);
+			} else if (e.getCode() == KeyCode.S) {
+				left.setDownKey(true);
+			} else if (e.getCode() == KeyCode.D) {	
+				top.setRightKey(true);
+			} else if (e.getCode() == KeyCode.A) {
+				top.setLeftKey(true);
 			// Player two uses arrow keys for bottom and right paddles
-			if (e.getCode() == KeyCode.UP) {
-
-			}
-			if (e.getCode() == KeyCode.LEFT) {
-
-			}
-			if (e.getCode() == KeyCode.RIGHT) {
-
-			}
-			if (e.getCode() == KeyCode.DOWN) {
-
+			} else if (e.getCode() == KeyCode.UP) {
+				right.setUpKey(true);
+			} else if (e.getCode() == KeyCode.DOWN) {	
+				right.setDownKey(true);
+			} else if (e.getCode() == KeyCode.RIGHT) {	
+				bottom.setRightKey(true);
+			} else if (e.getCode() == KeyCode.LEFT) {
+				bottom.setLeftKey(true);
 			}
 		});
-		
+
 		scene.setOnKeyReleased(e -> {
-			//player one
+			// player one
 			if (e.getCode() == KeyCode.W) {
-
+				left.setUpKey(false);
+			} else if (e.getCode() == KeyCode.A) {
+				top.setLeftKey(false);
+			} else if (e.getCode() == KeyCode.S) {
+				left.setDownKey(false);
+			} else if (e.getCode() == KeyCode.D) {
+				top.setRightKey(false);
 			}
-			if (e.getCode() == KeyCode.A) {
 
-			}
-			if (e.getCode() == KeyCode.S) {
-
-			}
-			if (e.getCode() == KeyCode.D) {
-
-			}
-			
-			//player two
-			if (e.getCode() == KeyCode.UP) {
-
-			}
-			if (e.getCode() == KeyCode.LEFT) {
-
-			}
-			if (e.getCode() == KeyCode.RIGHT) {
-
-			}
-			if (e.getCode() == KeyCode.DOWN) {
-
+			// player two
+			else if (e.getCode() == KeyCode.UP) {
+				right.setUpKey(false);
+			} else if (e.getCode() == KeyCode.LEFT) {
+				bottom.setLeftKey(false);
+			} else if (e.getCode() == KeyCode.RIGHT) {
+				bottom.setRightKey(false);
+			} else if (e.getCode() == KeyCode.DOWN) {
+				right.setDownKey(false);
 			}
 		});
 	}
 
 	public void update() {
-
+		//checkForScore();
+		
+		top.move();
+		bottom.move();
+		left.move();
+		right.move();
 	}
 
 	public void launch() {
@@ -111,6 +117,13 @@ public class FourPaddlePong extends Application {
 	}
 
 	public void render(GraphicsContext gc) {
+		gc.setFill(Color.CORAL);
+		gc.fillRect(0, 0, WIDTH, HEIGHT);
+		
+		left.render(gc);
+		right.render(gc);
+		top.render(gc);
+		bottom.render(gc);
 
 	}
 
@@ -118,9 +131,6 @@ public class FourPaddlePong extends Application {
 		launch(args);
 	}
 
-	/*
-	 * TODO: implement KeyFrame to drive the game's animation
-	 */
 	@Override
 	public void start(Stage stage) {
 		stage.setTitle(APP_NAME);

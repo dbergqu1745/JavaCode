@@ -30,7 +30,12 @@ public class CircularDoublyLinkedList {
 	}
 	
 	public void insertTail(int a) {
+		Node node = new Node(a);
 		
+		node.previous = sentinel.previous;
+		sentinel.previous.next = node;
+		sentinel.previous = node;
+		node.next = sentinel;
 	}
 	
 	public void print() {
@@ -54,5 +59,11 @@ public class CircularDoublyLinkedList {
 		list.insertHead(9);
 		list.insertHead(890);
 		list.print();
+		
+		System.out.println();
+		
+		list.insertTail(69);
+		list.print();
+		list.insertTail(43);
 	}
 }
