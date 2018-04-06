@@ -33,9 +33,12 @@ class Grid {
 		int col = right / CELLSIZE;
 		int row1 = ((int) r.getMinY()) / CELLSIZE;
 		int row2 = ((int) r.getMaxY()) / CELLSIZE;
+		
 		if (row2 >= MHEIGHT)
 			row2 = MHEIGHT - 1;
+		
 		int edge = CELLSIZE * (col + 1);
+		
 		if ((right + d) < edge)
 			return d;
 		if (col == (MWIDTH - 1))
@@ -43,6 +46,7 @@ class Grid {
 		for (int row = row1; row <= row2; row++)
 			if (map[col + 1][row] != 0)
 				return edge - right - 1;
+		
 		return d;
 	}
 
